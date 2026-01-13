@@ -41,3 +41,14 @@ function payIsabune() {
 <script>
   Pi.init({ version: "2.0" });
 </script>
+<button onclick="login()">Injira muri Pi</button>
+
+<script>
+  function login() {
+    Pi.authenticate(['username'], function(auth) {
+      alert("Murakaza neza " + auth.user.username);
+    }, function(error) {
+      console.log(error);
+    });
+  }
+</script>
