@@ -1,20 +1,74 @@
 <!DOCTYPE html>
-<html>
+<html lang="rw">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pi Shop</title>
+
+  <!-- Pi SDK -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+  <!-- Style yoroheje -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f0f0f0;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      background-color: white;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    button {
+      background-color: #6366f1;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4f46e5;
+    }
+  </style>
 </head>
 
 <body>
   <h1>Murakaza neza kuri Pi Shop</h1>
 
+  <!-- Button ya Pi login -->
   <button onclick="login()">Injira muri Pi</button>
 
-<script>
-  Pi.init({ version: "2.0", sandbox: true });
-</script>
+  <!-- Ibicuruzwa -->
+  <h2>Ibicuruzwa:</h2>
+  <ul>
+    <li>
+      Isabuni – 2 Pi
+      <button onclick="buyPi(2, 'Isabuni')">Gura</button>
+    </li>
+    <li>
+      Rihira – 3 Pi
+      <button onclick="buyPi(3, 'Rihira')">Gura</button>
+    </li>
+  </ul>
 
+  <script>
+    // Init Pi SDK muri sandbox mode
+    Pi.init({ version: "2.0", sandbox: true });
+
+    // Function ya login
     function login() {
       Pi.authenticate(['username'], function(auth) {
         alert("Murakaza neza " + auth.user.username);
@@ -22,6 +76,11 @@
         console.log(error);
         alert("Habaye ikibazo");
       });
+    }
+
+    // Function yo kugura product (sandbox / testnet)
+    function buyPi(amount, product) {
+      alert("Uri kugura " + product + " ku " + amount + " Pi (sandbox test)");
     }
   </script>
 </body>
