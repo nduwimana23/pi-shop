@@ -11,8 +11,9 @@
 
   <button onclick="login()">Injira muri Pi</button>
 
-  <script>
-    Pi.init({ version: "2.0" });
+<script>
+  Pi.init({ version: "2.0", sandbox: true });
+</script>
 
     function login() {
       Pi.authenticate(['username'], function(auth) {
