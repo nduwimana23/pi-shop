@@ -1,54 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Pi Shop - nduwimana23</title>
+  <meta charset="UTF-8" />
+  <title>Pi Shop</title>
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+</head>
+
+<body>
+  <h1>Murakaza neza kuri Pi Shop</h1>
+
+  <button onclick="login()">Injira muri Pi</button>
+
   <script>
     Pi.init({ version: "2.0" });
-  </script>
-</head>
-<body>
 
-<h1>nduwimana23 Pi Shop</h1>
-
-<h2>Ibicuruzwa:</h2>
-<div>
-  <p>Isabune</p>
-  <p>Igiciro: 2 Pi</p>
-  <button onclick="payIsabune()">Rihira na Pi</button>
-</div>
-
-<script>
-function payIsabune() {
-  Pi.createPayment({
-    amount: 2,
-    memo: "Kugura Isabune",
-    metadata: { item: "Isabune" }
-  }, {
-    onComplete: function(payment) {
-      alert("Warihirije neza!");
-    },
-    onError: function(error) {
-      alert("Habaye ikibazo, gerageza ubwa kabiri");
+    function login() {
+      Pi.authenticate(['username'], function(auth) {
+        alert("Murakaza neza " + auth.user.username);
+      }, function(error) {
+        console.log(error);
+        alert("Habaye ikibazo");
+      });
     }
-  });
-}
-</script>
-
+  </script>
 </body>
 </html>
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
-<script>
-  Pi.init({ version: "2.0" });
-</script>
-<button onclick="login()">Injira muri Pi</button>
-
-<script>
-  function login() {
-    Pi.authenticate(['username'], function(auth) {
-      alert("Murakaza neza " + auth.user.username);
-    }, function(error) {
-      console.log(error);
-    });
-  }
-</script>
