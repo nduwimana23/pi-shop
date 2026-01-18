@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="rn">
 <head>
   <meta charset="UTF-8">
-  <title>Pi Shop</title>
+  <title>nduwimana23 Pi Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Pi SDK -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
@@ -13,107 +14,140 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f4f4f4;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 10px;
+    }
+    h1 {
+      text-align: center;
+      color: #6a0dad;
+    }
+    .product {
+      background: white;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .product h3 {
+      margin: 0;
     }
     button {
-      padding: 10px;
-      margin: 5px;
-      cursor: pointer;
-    }
-    .box {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      margin-top: 15px;
+      background: #6a0dad;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      margin-top: 5px;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- Language buttons -->
-  <button onclick="setLang('rn')">Kirundi</button>
-  <button onclick="setLang('pt')">Português</button>
+<h1>🛒 nduwimana23 Pi Shop</h1>
 
-  <div class="box">
-    <h1 id="title"></h1>
-    <p id="products"></p>
+<button onclick="login()">🔐 Injira muri Pi</button>
 
-    <button onclick="login()" id="loginBtn"></button>
-    <button onclick="buy()" id="buyBtn"></button>
-  </div>
+<hr>
 
-  <script>
-    /* 🌍 MULTI-LANGUAGE TEXTS */
-    const texts = {
-      rn: {
-        title: "Murakaza neza kuri Pi Shop",
-        products: "Ibicuruzwa: Isabuni – Igiciro: 2 Pi",
-        login: "Injira muri Pi",
-        buy: "Gura",
-        welcome: "Murakaza neza "
+<!-- AMAVUTA -->
+<div class="product">
+  <h3>Amavuta ya Palme</h3>
+  <p>Igiciro: 1 Pi</p>
+  <button onclick="pay('Amavuta ya Palme', 1)">Gura na Pi</button>
+</div>
+
+<div class="product">
+  <h3>Amavuta ya Olive</h3>
+  <p>Igiciro: 2 Pi</p>
+  <button onclick="pay('Amavuta ya Olive', 2)">Gura na Pi</button>
+</div>
+
+<!-- UMUCERI -->
+<div class="product">
+  <h3>Umuceri wa Local</h3>
+  <p>Igiciro: 2 Pi</p>
+  <button onclick="pay('Umuceri wa Local', 2)">Gura na Pi</button>
+</div>
+
+<div class="product">
+  <h3>Umuceri wa Pakistan</h3>
+  <p>Igiciro: 3 Pi</p>
+  <button onclick="pay('Umuceri wa Pakistan', 3)">Gura na Pi</button>
+</div>
+
+<!-- ISUKARI -->
+<div class="product">
+  <h3>Isukari (1kg)</h3>
+  <p>Igiciro: 1 Pi</p>
+  <button onclick="pay('Isukari', 1)">Gura na Pi</button>
+</div>
+
+<!-- IBIHARAGE -->
+<div class="product">
+  <h3>Ibiharage</h3>
+  <p>Igiciro: 1 Pi</p>
+  <button onclick="pay('Ibiharage', 1)">Gura na Pi</button>
+</div>
+
+<!-- ISABUNI -->
+<div class="product">
+  <h3>Isabuni Sunlight</h3>
+  <p>Igiciro: 1 Pi</p>
+  <button onclick="pay('Isabuni Sunlight', 1)">Gura na Pi</button>
+</div>
+
+<!-- AMAJUSI -->
+<div class="product">
+  <h3>Jus ya Mango</h3>
+  <p>Igiciro: 1 Pi</p>
+  <button onclick="pay('Jus ya Mango', 1)">Gura na Pi</button>
+</div>
+
+<!-- FANTA -->
+<div class="product">
+  <h3>Fanta Orange</h3>
+  <p>Igiciro: 1 Pi</p>
+  <button onclick="pay('Fanta Orange', 1)">Gura na Pi</button>
+</div>
+
+<!-- IMIVINYU -->
+<div class="product">
+  <h3>Vin Rouge</h3>
+  <p>Igiciro: 2 Pi</p>
+  <button onclick="pay('Vin Rouge', 2)">Gura na Pi</button>
+</div>
+
+<script>
+  function login() {
+    Pi.authenticate(['username'], function(auth) {
+      alert("Murakaza neza " + auth.user.username);
+    }, function(error) {
+      alert("Habaye ikibazo co kwinjira");
+    });
+  }
+
+  function pay(item, amount) {
+    Pi.createPayment({
+      amount: amount,
+      memo: item,
+      metadata: { product: item }
+    }, {
+      onReadyForServerApproval: function(paymentId) {
+        console.log(paymentId);
       },
-      pt: {
-        title: "Bem-vindo à Loja Pi",
-        products: "Produtos: Sabão – Preço: 2 Pi",
-        login: "Entrar com Pi",
-        buy: "Comprar",
-        welcome: "Bem-vindo "
+      onReadyForServerCompletion: function(paymentId, txid) {
+        alert("Waguze " + item + " neza!");
+      },
+      onCancel: function() {
+        alert("Wahagaritse igikorwa");
+      },
+      onError: function(error) {
+        console.error(error);
       }
-    };
-
-    let currentLang = "rn";
-
-    function setLang(lang) {
-      currentLang = lang;
-      document.getElementById("title").innerText = texts[lang].title;
-      document.getElementById("products").innerText = texts[lang].products;
-      document.getElementById("loginBtn").innerText = texts[lang].login;
-      document.getElementById("buyBtn").innerText = texts[lang].buy;
-    }
-
-    /* Default language */
-    setLang("rn");
-
-    /* 🔐 PI LOGIN */
-    function login() {
-      Pi.authenticate(
-        ["username"],
-        function (auth) {
-          alert(texts[currentLang].welcome + auth.user.username);
-        },
-        function (error) {
-          alert("Habaye ikibazo / Erro");
-        }
-      );
-    }
-
-    /* 💰 PI PAYMENT (DEMO) */
-    function buy() {
-      Pi.createPayment(
-        {
-          amount: 2,
-          memo: "Isabuni / Sabão",
-          metadata: { product: "Isabuni" }
-        },
-        {
-          onReadyForServerApproval: function (paymentId) {
-            console.log("Payment ID:", paymentId);
-          },
-          onReadyForServerCompletion: function (paymentId, txid) {
-            alert("Payment successful!");
-          },
-          onCancel: function () {
-            alert("Payment cancelled");
-          },
-          onError: function (error) {
-            alert("Payment error");
-          }
-        }
-      );
-    }
-  </script>
+    });
+  }
+</script>
 
 </body>
 </html>
