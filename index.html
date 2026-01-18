@@ -27,9 +27,18 @@
       margin: 10px 0;
       padding: 10px;
       border-radius: 8px;
+      display: flex;
+      align-items: center;
     }
-    .product h3 {
-      margin: 0;
+    .product img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 10px;
+      border-radius: 5px;
+    }
+    .product-details {
+      flex: 1;
     }
     button {
       background: #6a0dad;
@@ -38,6 +47,14 @@
       padding: 8px 12px;
       border-radius: 5px;
       margin-top: 5px;
+    }
+    .language-buttons {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .language-buttons button {
+      margin: 0 5px;
+      background: #333;
     }
   </style>
 </head>
@@ -48,67 +65,77 @@
 
 <button onclick="login()">🔐 Injira muri Pi</button>
 
+<div class="language-buttons">
+  <button onclick="renderShop('kr')">🇧🇮 Kirundi</button>
+  <button onclick="renderShop('pt')">🇲🇿 Portuguese</button>
+</div>
+
 <hr>
 
 <div id="shop-container"></div>
 
 <script>
   // ---------------------------
-  // 1️⃣ PRODUCTS ARRAY (Dynamic)
+  // 1️⃣ PRODUCTS ARRAY (Dynamic + Multi-language + Images)
   // ---------------------------
   const products = [
-    {name: "Amavuta ya Palme", price: 1, category:"Amavuta"},
-    {name: "Amavuta ya Tournesol", price: 1, category:"Amavuta"},
-    {name: "Amavuta ya Olive", price: 2, category:"Amavuta"},
-    {name: "Umuceri wa Local", price: 2, category:"Umuceri"},
-    {name: "Umuceri wa Pakistan", price: 3, category:"Umuceri"},
-    {name: "Isukari yera", price: 1, category:"Isukari"},
-    {name: "Isukari y’umukara", price: 1, category:"Isukari"},
-    {name: "Ibiharage bitukura", price: 1, category:"Ibiharage"},
-    {name: "Ibiharage vy’umukara", price: 1, category:"Ibiharage"},
-    {name: "Ibiharage vy’umweru", price: 2, category:"Ibiharage"},
-    {name: "Spaghetti Golden", price: 1, category:"Isubageti"},
-    {name: "Spaghetti Royal", price: 1, category:"Isubageti"},
-    {name: "Umunyu w’icayi", price: 1, category:"Umunyu"},
-    {name: "Umunyu wo mu gikoni", price: 1, category:"Umunyu"},
-    {name: "Isabuni OMO", price: 1, category:"Isabuni"},
-    {name: "Isabuni Sunlight", price: 1, category:"Isabuni"},
-    {name: "Isabuni Geisha", price: 1, category:"Isabuni"},
-    {name: "Isabuni Dettol", price: 1, category:"Isabuni"},
-    {name: "Jus ya Mango", price: 1, category:"Ama jus"},
-    {name: "Jus ya Orange", price: 1, category:"Ama jus"},
-    {name: "Jus ya Ananas", price: 1, category:"Ama jus"},
-    {name: "Jus Cocktail", price: 1, category:"Ama jus"},
-    {name: "Amata Inyange", price: 1, category:"Amata"},
-    {name: "Amata Laiterie", price: 1, category:"Amata"},
-    {name: "Amata Nido", price: 1, category:"Amata"},
-    {name: "Pampers Small", price: 3, category:"Pampers"},
-    {name: "Pampers Medium", price: 3, category:"Pampers"},
-    {name: "Pampers Large", price: 4, category:"Pampers"},
-    {name: "Fanta Orange", price: 1, category:"Fanta"},
-    {name: "Fanta Citron", price: 1, category:"Fanta"},
-    {name: "Coca Cola", price: 1, category:"Fanta"},
-    {name: "Pepsi", price: 1, category:"Fanta"},
-    {name: "Vin Rouge", price: 2, category:"Imivinyu"},
-    {name: "Vin Blanc", price: 2, category:"Imivinyu"},
-    {name: "Vin Rosé", price: 2, category:"Imivinyu"}
+    {name:{kr:"Amavuta ya Palme", pt:"Óleo de Palme"}, price: 1, category:"Amavuta", image:"images/amavuta-palme.jpg"},
+    {name:{kr:"Amavuta ya Olive", pt:"Óleo de Oliva"}, price: 2, category:"Amavuta", image:"images/amavuta-olive.jpg"},
+    {name:{kr:"Amavuta ya Tournesol", pt:"Óleo de Girassol"}, price: 1, category:"Amavuta", image:"images/amavuta-tournesol.jpg"},
+    {name:{kr:"Umuceri wa Local", pt:"Arroz Local"}, price: 2, category:"Umuceri", image:"images/umuceri-local.jpg"},
+    {name:{kr:"Umuceri wa Pakistan", pt:"Arroz do Paquistão"}, price: 3, category:"Umuceri", image:"images/umuceri-pakistan.jpg"},
+    {name:{kr:"Isukari yera", pt:"Açúcar Branco"}, price: 1, category:"Isukari", image:"images/isukari-yera.jpg"},
+    {name:{kr:"Isukari y’umukara", pt:"Açúcar Mascavo"}, price: 1, category:"Isukari", image:"images/isukari-mascavo.jpg"},
+    {name:{kr:"Ibiharage bitukura", pt:"Feijão Vermelho"}, price: 1, category:"Ibiharage", image:"images/ibiharage-bitukura.jpg"},
+    {name:{kr:"Ibiharage vy’umukara", pt:"Feijão Preto"}, price: 1, category:"Ibiharage", image:"images/ibiharage-umukara.jpg"},
+    {name:{kr:"Ibiharage vy’umweru", pt:"Feijão Branco"}, price: 2, category:"Ibiharage", image:"images/ibiharage-umweru.jpg"},
+    {name:{kr:"Isubageti Golden", pt:"Espaguete Golden"}, price: 1, category:"Isubageti", image:"images/isubageti-golden.jpg"},
+    {name:{kr:"Isubageti Royal", pt:"Espaguete Royal"}, price: 1, category:"Isubageti", image:"images/isubageti-royal.jpg"},
+    {name:{kr:"Umunyu w’icayi", pt:"Sal de Chá"}, price: 1, category:"Umunyu", image:"images/umunyu-icayi.jpg"},
+    {name:{kr:"Umunyu wo mu gikoni", pt:"Sal de Cozinha"}, price: 1, category:"Umunyu", image:"images/umunyu-gikoni.jpg"},
+    {name:{kr:"Isabuni OMO", pt:"Sabão OMO"}, price: 1, category:"Isabuni", image:"images/isabuni-omo.jpg"},
+    {name:{kr:"Isabuni Sunlight", pt:"Sabão Sunlight"}, price: 1, category:"Isabuni", image:"images/isabuni-sunlight.jpg"},
+    {name:{kr:"Isabuni Geisha", pt:"Sabão Geisha"}, price: 1, category:"Isabuni", image:"images/isabuni-geisha.jpg"},
+    {name:{kr:"Isabuni Dettol", pt:"Sabão Dettol"}, price: 1, category:"Isabuni", image:"images/isabuni-dettol.jpg"},
+    {name:{kr:"Jus ya Mango", pt:"Suco de Manga"}, price: 1, category:"Ama jus", image:"images/jus-mango.jpg"},
+    {name:{kr:"Jus ya Orange", pt:"Suco de Laranja"}, price: 1, category:"Ama jus", image:"images/jus-orange.jpg"},
+    {name:{kr:"Jus ya Ananas", pt:"Suco de Abacaxi"}, price: 1, category:"Ama jus", image:"images/jus-ananas.jpg"},
+    {name:{kr:"Jus Cocktail", pt:"Suco Cocktail"}, price: 1, category:"Ama jus", image:"images/jus-cocktail.jpg"},
+    {name:{kr:"Amata Inyange", pt:"Leite Inyange"}, price: 1, category:"Amata", image:"images/amata-inyange.jpg"},
+    {name:{kr:"Amata Laiterie", pt:"Leite Laiterie"}, price: 1, category:"Amata", image:"images/amata-laiterie.jpg"},
+    {name:{kr:"Amata Nido", pt:"Leite Nido"}, price: 1, category:"Amata", image:"images/amata-nido.jpg"},
+    {name:{kr:"Pampers Small", pt:"Fralda Pequena"}, price: 3, category:"Pampers", image:"images/pampers-small.jpg"},
+    {name:{kr:"Pampers Medium", pt:"Fralda Média"}, price: 3, category:"Pampers", image:"images/pampers-medium.jpg"},
+    {name:{kr:"Pampers Large", pt:"Fralda Grande"}, price: 4, category:"Pampers", image:"images/pampers-large.jpg"},
+    {name:{kr:"Fanta Orange", pt:"Fanta Laranja"}, price: 1, category:"Fanta", image:"images/fanta-orange.jpg"},
+    {name:{kr:"Fanta Citron", pt:"Fanta Limão"}, price: 1, category:"Fanta", image:"images/fanta-citron.jpg"},
+    {name:{kr:"Coca Cola", pt:"Coca Cola"}, price: 1, category:"Fanta", image:"images/coca-cola.jpg"},
+    {name:{kr:"Pepsi", pt:"Pepsi"}, price: 1, category:"Fanta", image:"images/pepsi.jpg"},
+    {name:{kr:"Vin Rouge", pt:"Vinho Tinto"}, price: 2, category:"Imivinyu", image:"images/vin-rouge.jpg"},
+    {name:{kr:"Vin Blanc", pt:"Vinho Branco"}, price: 2, category:"Imivinyu", image:"images/vin-blanc.jpg"},
+    {name:{kr:"Vin Rosé", pt:"Vinho Rosé"}, price: 2, category:"Imivinyu", image:"images/vin-rose.jpg"}
   ];
 
   // ---------------------------
   // 2️⃣ DISPLAY PRODUCTS
   // ---------------------------
-  const container = document.getElementById('shop-container');
-
-  products.forEach(product => {
-    const div = document.createElement('div');
-    div.className = "product";
-    div.innerHTML = `
-      <h3>${product.name}</h3>
-      <p>Igiciro: ${product.price} Pi</p>
-      <button onclick="pay('${product.name}', ${product.price})">Gura na Pi</button>
-    `;
-    container.appendChild(div);
-  });
+  function renderShop(lang="kr") {
+    const container = document.getElementById('shop-container');
+    container.innerHTML = ""; // clear previous
+    products.forEach(product => {
+      const div = document.createElement('div');
+      div.className = "product";
+      div.innerHTML = `
+        <img src="${product.image}" alt="${product.name[lang]}">
+        <div class="product-details">
+          <h3>${product.name[lang]}</h3>
+          <p>Igiciro: ${product.price} Pi</p>
+          <button onclick="pay('${product.name[lang]}', ${product.price})">Gura na Pi</button>
+        </div>
+      `;
+      container.appendChild(div);
+    });
+  }
 
   // ---------------------------
   // 3️⃣ LOGIN FUNCTION
@@ -144,6 +171,11 @@
       }
     });
   }
+
+  // ---------------------------
+  // 5️⃣ INITIAL RENDER
+  // ---------------------------
+  renderShop('kr'); // default Kirundi
 
 </script>
 
