@@ -50,75 +50,69 @@
 
 <hr>
 
-<!-- AMAVUTA -->
-<div class="product">
-  <h3>Amavuta ya Palme</h3>
-  <p>Igiciro: 1 Pi</p>
-  <button onclick="pay('Amavuta ya Palme', 1)">Gura na Pi</button>
-</div>
-
-<div class="product">
-  <h3>Amavuta ya Olive</h3>
-  <p>Igiciro: 2 Pi</p>
-  <button onclick="pay('Amavuta ya Olive', 2)">Gura na Pi</button>
-</div>
-
-<!-- UMUCERI -->
-<div class="product">
-  <h3>Umuceri wa Local</h3>
-  <p>Igiciro: 2 Pi</p>
-  <button onclick="pay('Umuceri wa Local', 2)">Gura na Pi</button>
-</div>
-
-<div class="product">
-  <h3>Umuceri wa Pakistan</h3>
-  <p>Igiciro: 3 Pi</p>
-  <button onclick="pay('Umuceri wa Pakistan', 3)">Gura na Pi</button>
-</div>
-
-<!-- ISUKARI -->
-<div class="product">
-  <h3>Isukari (1kg)</h3>
-  <p>Igiciro: 1 Pi</p>
-  <button onclick="pay('Isukari', 1)">Gura na Pi</button>
-</div>
-
-<!-- IBIHARAGE -->
-<div class="product">
-  <h3>Ibiharage</h3>
-  <p>Igiciro: 1 Pi</p>
-  <button onclick="pay('Ibiharage', 1)">Gura na Pi</button>
-</div>
-
-<!-- ISABUNI -->
-<div class="product">
-  <h3>Isabuni Sunlight</h3>
-  <p>Igiciro: 1 Pi</p>
-  <button onclick="pay('Isabuni Sunlight', 1)">Gura na Pi</button>
-</div>
-
-<!-- AMAJUSI -->
-<div class="product">
-  <h3>Jus ya Mango</h3>
-  <p>Igiciro: 1 Pi</p>
-  <button onclick="pay('Jus ya Mango', 1)">Gura na Pi</button>
-</div>
-
-<!-- FANTA -->
-<div class="product">
-  <h3>Fanta Orange</h3>
-  <p>Igiciro: 1 Pi</p>
-  <button onclick="pay('Fanta Orange', 1)">Gura na Pi</button>
-</div>
-
-<!-- IMIVINYU -->
-<div class="product">
-  <h3>Vin Rouge</h3>
-  <p>Igiciro: 2 Pi</p>
-  <button onclick="pay('Vin Rouge', 2)">Gura na Pi</button>
-</div>
+<div id="shop-container"></div>
 
 <script>
+  // ---------------------------
+  // 1️⃣ PRODUCTS ARRAY (Dynamic)
+  // ---------------------------
+  const products = [
+    {name: "Amavuta ya Palme", price: 1, category:"Amavuta"},
+    {name: "Amavuta ya Tournesol", price: 1, category:"Amavuta"},
+    {name: "Amavuta ya Olive", price: 2, category:"Amavuta"},
+    {name: "Umuceri wa Local", price: 2, category:"Umuceri"},
+    {name: "Umuceri wa Pakistan", price: 3, category:"Umuceri"},
+    {name: "Isukari yera", price: 1, category:"Isukari"},
+    {name: "Isukari y’umukara", price: 1, category:"Isukari"},
+    {name: "Ibiharage bitukura", price: 1, category:"Ibiharage"},
+    {name: "Ibiharage vy’umukara", price: 1, category:"Ibiharage"},
+    {name: "Ibiharage vy’umweru", price: 2, category:"Ibiharage"},
+    {name: "Spaghetti Golden", price: 1, category:"Isubageti"},
+    {name: "Spaghetti Royal", price: 1, category:"Isubageti"},
+    {name: "Umunyu w’icayi", price: 1, category:"Umunyu"},
+    {name: "Umunyu wo mu gikoni", price: 1, category:"Umunyu"},
+    {name: "Isabuni OMO", price: 1, category:"Isabuni"},
+    {name: "Isabuni Sunlight", price: 1, category:"Isabuni"},
+    {name: "Isabuni Geisha", price: 1, category:"Isabuni"},
+    {name: "Isabuni Dettol", price: 1, category:"Isabuni"},
+    {name: "Jus ya Mango", price: 1, category:"Ama jus"},
+    {name: "Jus ya Orange", price: 1, category:"Ama jus"},
+    {name: "Jus ya Ananas", price: 1, category:"Ama jus"},
+    {name: "Jus Cocktail", price: 1, category:"Ama jus"},
+    {name: "Amata Inyange", price: 1, category:"Amata"},
+    {name: "Amata Laiterie", price: 1, category:"Amata"},
+    {name: "Amata Nido", price: 1, category:"Amata"},
+    {name: "Pampers Small", price: 3, category:"Pampers"},
+    {name: "Pampers Medium", price: 3, category:"Pampers"},
+    {name: "Pampers Large", price: 4, category:"Pampers"},
+    {name: "Fanta Orange", price: 1, category:"Fanta"},
+    {name: "Fanta Citron", price: 1, category:"Fanta"},
+    {name: "Coca Cola", price: 1, category:"Fanta"},
+    {name: "Pepsi", price: 1, category:"Fanta"},
+    {name: "Vin Rouge", price: 2, category:"Imivinyu"},
+    {name: "Vin Blanc", price: 2, category:"Imivinyu"},
+    {name: "Vin Rosé", price: 2, category:"Imivinyu"}
+  ];
+
+  // ---------------------------
+  // 2️⃣ DISPLAY PRODUCTS
+  // ---------------------------
+  const container = document.getElementById('shop-container');
+
+  products.forEach(product => {
+    const div = document.createElement('div');
+    div.className = "product";
+    div.innerHTML = `
+      <h3>${product.name}</h3>
+      <p>Igiciro: ${product.price} Pi</p>
+      <button onclick="pay('${product.name}', ${product.price})">Gura na Pi</button>
+    `;
+    container.appendChild(div);
+  });
+
+  // ---------------------------
+  // 3️⃣ LOGIN FUNCTION
+  // ---------------------------
   function login() {
     Pi.authenticate(['username'], function(auth) {
       alert("Murakaza neza " + auth.user.username);
@@ -127,6 +121,9 @@
     });
   }
 
+  // ---------------------------
+  // 4️⃣ PAYMENT FUNCTION
+  // ---------------------------
   function pay(item, amount) {
     Pi.createPayment({
       amount: amount,
@@ -147,6 +144,7 @@
       }
     });
   }
+
 </script>
 
 </body>
