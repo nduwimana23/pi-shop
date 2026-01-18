@@ -12,55 +12,18 @@
   </script>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 10px;
-    }
-    h1 {
-      text-align: center;
-      color: #6a0dad;
-    }
-    .product {
-      background: white;
-      margin: 10px 0;
-      padding: 10px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-    }
-    .product img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      margin-right: 10px;
-      border-radius: 5px;
-    }
-    .product-details {
-      flex: 1;
-    }
-    button {
-      background: #6a0dad;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      margin-top: 5px;
-    }
-    .language-buttons {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    .language-buttons button {
-      margin: 0 5px;
-      background: #333;
-    }
+    body { font-family: Arial; background: #f5f5f5; margin:0; padding:10px; }
+    h1 { text-align: center; color:#6a0dad; }
+    .product { background:white; margin:10px 0; padding:10px; border-radius:8px; display:flex; align-items:center; }
+    .product img { width:80px; height:80px; object-fit:cover; margin-right:10px; border-radius:5px; }
+    .product-details { flex:1; }
+    button { background:#6a0dad; color:white; border:none; padding:8px 12px; border-radius:5px; margin-top:5px; }
+    .language-buttons { text-align:center; margin-bottom:10px; }
+    .language-buttons button { margin:0 5px; background:#333; color:white; }
   </style>
 </head>
 
 <body>
-
 <h1>🛒 nduwimana23 Pi Shop</h1>
 
 <button onclick="login()">🔐 Injira muri Pi</button>
@@ -75,53 +38,25 @@
 <div id="shop-container"></div>
 
 <script>
-  // ---------------------------
-  // 1️⃣ PRODUCTS ARRAY (Dynamic + Multi-language + Images)
-  // ---------------------------
+  // Products array
   const products = [
-    {name:{kr:"Amavuta ya Palme", pt:"Óleo de Palme"}, price: 1, category:"Amavuta", image:"images/amavuta-palme.jpg"},
-    {name:{kr:"Amavuta ya Olive", pt:"Óleo de Oliva"}, price: 2, category:"Amavuta", image:"images/amavuta-olive.jpg"},
-    {name:{kr:"Amavuta ya Tournesol", pt:"Óleo de Girassol"}, price: 1, category:"Amavuta", image:"images/amavuta-tournesol.jpg"},
-    {name:{kr:"Umuceri wa Local", pt:"Arroz Local"}, price: 2, category:"Umuceri", image:"images/umuceri-local.jpg"},
-    {name:{kr:"Umuceri wa Pakistan", pt:"Arroz do Paquistão"}, price: 3, category:"Umuceri", image:"images/umuceri-pakistan.jpg"},
-    {name:{kr:"Isukari yera", pt:"Açúcar Branco"}, price: 1, category:"Isukari", image:"images/isukari-yera.jpg"},
-    {name:{kr:"Isukari y’umukara", pt:"Açúcar Mascavo"}, price: 1, category:"Isukari", image:"images/isukari-mascavo.jpg"},
-    {name:{kr:"Ibiharage bitukura", pt:"Feijão Vermelho"}, price: 1, category:"Ibiharage", image:"images/ibiharage-bitukura.jpg"},
-    {name:{kr:"Ibiharage vy’umukara", pt:"Feijão Preto"}, price: 1, category:"Ibiharage", image:"images/ibiharage-umukara.jpg"},
-    {name:{kr:"Ibiharage vy’umweru", pt:"Feijão Branco"}, price: 2, category:"Ibiharage", image:"images/ibiharage-umweru.jpg"},
-    {name:{kr:"Isubageti Golden", pt:"Espaguete Golden"}, price: 1, category:"Isubageti", image:"images/isubageti-golden.jpg"},
-    {name:{kr:"Isubageti Royal", pt:"Espaguete Royal"}, price: 1, category:"Isubageti", image:"images/isubageti-royal.jpg"},
-    {name:{kr:"Umunyu w’icayi", pt:"Sal de Chá"}, price: 1, category:"Umunyu", image:"images/umunyu-icayi.jpg"},
-    {name:{kr:"Umunyu wo mu gikoni", pt:"Sal de Cozinha"}, price: 1, category:"Umunyu", image:"images/umunyu-gikoni.jpg"},
-    {name:{kr:"Isabuni OMO", pt:"Sabão OMO"}, price: 1, category:"Isabuni", image:"images/isabuni-omo.jpg"},
-    {name:{kr:"Isabuni Sunlight", pt:"Sabão Sunlight"}, price: 1, category:"Isabuni", image:"images/isabuni-sunlight.jpg"},
-    {name:{kr:"Isabuni Geisha", pt:"Sabão Geisha"}, price: 1, category:"Isabuni", image:"images/isabuni-geisha.jpg"},
-    {name:{kr:"Isabuni Dettol", pt:"Sabão Dettol"}, price: 1, category:"Isabuni", image:"images/isabuni-dettol.jpg"},
-    {name:{kr:"Jus ya Mango", pt:"Suco de Manga"}, price: 1, category:"Ama jus", image:"images/jus-mango.jpg"},
-    {name:{kr:"Jus ya Orange", pt:"Suco de Laranja"}, price: 1, category:"Ama jus", image:"images/jus-orange.jpg"},
-    {name:{kr:"Jus ya Ananas", pt:"Suco de Abacaxi"}, price: 1, category:"Ama jus", image:"images/jus-ananas.jpg"},
-    {name:{kr:"Jus Cocktail", pt:"Suco Cocktail"}, price: 1, category:"Ama jus", image:"images/jus-cocktail.jpg"},
-    {name:{kr:"Amata Inyange", pt:"Leite Inyange"}, price: 1, category:"Amata", image:"images/amata-inyange.jpg"},
-    {name:{kr:"Amata Laiterie", pt:"Leite Laiterie"}, price: 1, category:"Amata", image:"images/amata-laiterie.jpg"},
-    {name:{kr:"Amata Nido", pt:"Leite Nido"}, price: 1, category:"Amata", image:"images/amata-nido.jpg"},
-    {name:{kr:"Pampers Small", pt:"Fralda Pequena"}, price: 3, category:"Pampers", image:"images/pampers-small.jpg"},
-    {name:{kr:"Pampers Medium", pt:"Fralda Média"}, price: 3, category:"Pampers", image:"images/pampers-medium.jpg"},
-    {name:{kr:"Pampers Large", pt:"Fralda Grande"}, price: 4, category:"Pampers", image:"images/pampers-large.jpg"},
-    {name:{kr:"Fanta Orange", pt:"Fanta Laranja"}, price: 1, category:"Fanta", image:"images/fanta-orange.jpg"},
-    {name:{kr:"Fanta Citron", pt:"Fanta Limão"}, price: 1, category:"Fanta", image:"images/fanta-citron.jpg"},
-    {name:{kr:"Coca Cola", pt:"Coca Cola"}, price: 1, category:"Fanta", image:"images/coca-cola.jpg"},
-    {name:{kr:"Pepsi", pt:"Pepsi"}, price: 1, category:"Fanta", image:"images/pepsi.jpg"},
-    {name:{kr:"Vin Rouge", pt:"Vinho Tinto"}, price: 2, category:"Imivinyu", image:"images/vin-rouge.jpg"},
-    {name:{kr:"Vin Blanc", pt:"Vinho Branco"}, price: 2, category:"Imivinyu", image:"images/vin-blanc.jpg"},
-    {name:{kr:"Vin Rosé", pt:"Vinho Rosé"}, price: 2, category:"Imivinyu", image:"images/vin-rose.jpg"}
+    {name:{kr:"Amavuta ya Palme", pt:"Óleo de Palme"}, price:1, image:"images/amavuta-palme.jpg"},
+    {name:{kr:"Amavuta ya Olive", pt:"Óleo de Oliva"}, price:2, image:"images/amavuta-olive.jpg"},
+    {name:{kr:"Umuceri", pt:"Arroz"}, price:2, image:"images/umuceri.jpg"},
+    {name:{kr:"Isukari", pt:"Açúcar"}, price:1, image:"images/isukari.jpg"},
+    {name:{kr:"Ibiharage", pt:"Feijão"}, price:1, image:"images/ibiharage.jpg"},
+    {name:{kr:"Isabuni", pt:"Sabão"}, price:1, image:"images/isabuni.jpg"},
+    {name:{kr:"Ama jus", pt:"Suco"}, price:1, image:"images/jus.jpg"},
+    {name:{kr:"Amata", pt:"Leite"}, price:1, image:"images/amata.jpg"},
+    {name:{kr:"Pampers", pt:"Fralda"}, price:3, image:"images/pampers.jpg"},
+    {name:{kr:"Fanta", pt:"Fanta"}, price:1, image:"images/fanta.jpg"},
+    {name:{kr:"Imivinyu", pt:"Vinho"}, price:2, image:"images/vin.jpg"}
   ];
 
-  // ---------------------------
-  // 2️⃣ DISPLAY PRODUCTS
-  // ---------------------------
-  function renderShop(lang="kr") {
+  // Render products
+  function renderShop(lang="kr"){
     const container = document.getElementById('shop-container');
-    container.innerHTML = ""; // clear previous
+    container.innerHTML = "";
     products.forEach(product => {
       const div = document.createElement('div');
       div.className = "product";
@@ -137,46 +72,33 @@
     });
   }
 
-  // ---------------------------
-  // 3️⃣ LOGIN FUNCTION
-  // ---------------------------
-  function login() {
-    Pi.authenticate(['username'], function(auth) {
+  // Login function
+  function login(){
+    if(!window.Pi){ alert("Banza ukoreshe Pi Browser!"); return; }
+    Pi.authenticate(['username'], function(auth){
       alert("Murakaza neza " + auth.user.username);
-    }, function(error) {
+    }, function(error){
       alert("Habaye ikibazo co kwinjira");
     });
   }
 
-  // ---------------------------
-  // 4️⃣ PAYMENT FUNCTION
-  // ---------------------------
-  function pay(item, amount) {
+  // Payment function
+  function pay(item, amount){
+    if(!window.Pi){ alert("Banza ukoreshe Pi Browser!"); return; }
     Pi.createPayment({
       amount: amount,
       memo: item,
       metadata: { product: item }
-    }, {
-      onReadyForServerApproval: function(paymentId) {
-        console.log(paymentId);
-      },
-      onReadyForServerCompletion: function(paymentId, txid) {
-        alert("Waguze " + item + " neza!");
-      },
-      onCancel: function() {
-        alert("Wahagaritse igikorwa");
-      },
-      onError: function(error) {
-        console.error(error);
-      }
+    },{
+      onReadyForServerApproval: function(paymentId){ console.log(paymentId); },
+      onReadyForServerCompletion: function(paymentId, txid){ alert("Waguze " + item + " neza!"); },
+      onCancel: function(){ alert("Wahagaritse igikorwa"); },
+      onError: function(error){ console.error(error); }
     });
   }
 
-  // ---------------------------
-  // 5️⃣ INITIAL RENDER
-  // ---------------------------
-  renderShop('kr'); // default Kirundi
-
+  // Initial render
+  renderShop('kr');
 </script>
 
 </body>
