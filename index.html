@@ -1,161 +1,200 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="rn">
 <head>
-  <meta charset="UTF-8">
-  <title>Pi Shop Marketplace</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Pi Shop Marketplace</title>
 
-  <!-- Pi SDK -->
-  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-  <script>
-    Pi.init({ version: "2.0", sandbox: true });
-  </script>
+<!-- PI SDK -->
+<script src="https://sdk.minepi.com/pi-sdk.js"></script>
+<script>
+  Pi.init({ version: "2.0", sandbox: true });
+</script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f5f5f5;
-    }
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+}
 
-    header {
-      background: #0a7d4f;
-      color: white;
-      padding: 15px;
-      text-align: center;
-    }
+header {
+  background: #0a7a4a;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
 
-    .container {
-      padding: 15px;
-    }
+nav {
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.1);
+}
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
+nav button {
+  border: none;
+  background: none;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    .cart {
-      background: #0a7d4f;
-      color: white;
-      padding: 8px 12px;
-      border-radius: 20px;
-      font-size: 14px;
-    }
+.container {
+  padding: 15px;
+}
 
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-    }
+.search-box input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
 
-    .product {
-      background: white;
-      border-radius: 10px;
-      padding: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
+.categories {
+  margin: 15px 0;
+}
 
-    .product h3 {
-      margin-top: 0;
-    }
+.categories button {
+  margin: 5px;
+  padding: 8px 12px;
+  border-radius: 20px;
+  border: 1px solid #0a7a4a;
+  background: white;
+  color: #0a7a4a;
+  cursor: pointer;
+}
 
-    .price {
-      font-weight: bold;
-      margin: 10px 0;
-    }
+.categories button.active {
+  background: #0a7a4a;
+  color: white;
+}
 
-    button {
-      width: 100%;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      background: #0a7d4f;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.product {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
 
-    button.secondary {
-      background: #444;
-      margin-bottom: 10px;
-    }
+.product h3 {
+  margin: 0;
+}
 
-    footer {
-      text-align: center;
-      padding: 10px;
-      font-size: 12px;
-      color: #777;
-    }
-  </style>
+.buy-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: #0a7a4a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: #333;
+  color: white;
+  border-radius: 8px;
+  border: none;
+  margin-bottom: 15px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h2>Pi Shop Marketplace</h2>
+  <h1>Pi Shop Marketplace</h1>
   <p>All payments in Pi (GCV Based)</p>
 </header>
 
+<nav>
+  <button>Products</button>
+  <button>Vendors</button>
+  <button>My Cart (<span id="cartCount">0</span>)</button>
+</nav>
+
 <div class="container">
 
-  <div class="top-bar">
-    <button class="secondary" onclick="login()">Injira muri Pi</button>
-    <div class="cart">🛒 Cart: <span id="cartCount">0</span></div>
-  </div>
+<button class="login-btn" onclick="loginPi()">Injira muri Pi</button>
 
-  <div class="products">
-
-    <div class="product">
-      <h3>Isukari (1kg)</h3>
-      <p>Isukari yiza yo mu rugo</p>
-      <div class="price">Igiciro: 0.003 Pi</div>
-      <button onclick="buy('Isukari', 0.003)">Gura</button>
-    </div>
-
-    <div class="product">
-      <h3>Umuceri (1kg)</h3>
-      <p>Umuceri wiza wo kurya neza</p>
-      <div class="price">Igiciro: 0.005 Pi</div>
-      <button onclick="buy('Umuceri', 0.005)">Gura</button>
-    </div>
-
-    <div class="product">
-      <h3>Isabuni</h3>
-      <p>Isabuni yo mu rugo</p>
-      <div class="price">Igiciro: 0.002 Pi</div>
-      <button onclick="buy('Isabuni', 0.002)">Gura</button>
-    </div>
-
-  </div>
+<div class="search-box">
+  <input type="text" placeholder="Rondera igicuruzwa..." onkeyup="searchProduct(this.value)">
 </div>
 
-<footer>
-  © 2026 Pi Shop • Sandbox Mode
-</footer>
+<div class="categories">
+  <button class="active" onclick="filterCategory('all')">All</button>
+  <button onclick="filterCategory('food')">Foods</button>
+  <button onclick="filterCategory('drink')">Drinks</button>
+  <button onclick="filterCategory('electronic')">Electronics</button>
+</div>
+
+<div id="products"></div>
+
+</div>
 
 <script>
-  let cart = 0;
+let cart = 0;
+let currentCategory = "all";
 
-  function login() {
-    Pi.authenticate(['username'], function(auth) {
-      alert("Murakaza neza " + auth.user.username);
-    }, function(error) {
-      alert("Habaye ikibazo co kwinjira");
-      console.log(error);
-    });
-  }
+const products = [
+  { name: "Isukari (1kg)", desc: "Isukari yiza yo mu rugo", price: 0.003, category: "food" },
+  { name: "Umuceri (1kg)", desc: "Umuceri wiza wo kurya neza", price: 0.005, category: "food" },
+  { name: "Isabuni", desc: "Isabuni yo mu rugo", price: 0.002, category: "food" }
+];
 
-  function buy(product, price) {
-    cart++;
-    document.getElementById("cartCount").innerText = cart;
-    alert(
-      "Wahisemwo kugura:\n" +
-      product +
-      "\nIgiciro: " + price + " Pi\n\n(Sandbox test)"
-    );
-  }
+function renderProducts(list){
+  const div = document.getElementById("products");
+  div.innerHTML = "";
+  list.forEach(p => {
+    div.innerHTML += `
+      <div class="product">
+        <h3>${p.name}</h3>
+        <p>${p.desc}</p>
+        <b>Igiciro: ${p.price} Pi</b>
+        <button class="buy-btn" onclick="buy()">Gura</button>
+      </div>
+    `;
+  });
+}
+
+function filterCategory(cat){
+  currentCategory = cat;
+  document.querySelectorAll(".categories button").forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
+  applyFilter();
+}
+
+function searchProduct(text){
+  applyFilter(text);
+}
+
+function applyFilter(search=""){
+  let list = products.filter(p =>
+    (currentCategory === "all" || p.category === currentCategory) &&
+    p.name.toLowerCase().includes(search.toLowerCase())
+  );
+  renderProducts(list);
+}
+
+function buy(){
+  cart++;
+  document.getElementById("cartCount").innerText = cart;
+  alert("Vyashizwe muri cart (test)");
+}
+
+function loginPi(){
+  Pi.authenticate(['username'], function(auth){
+    alert("Murakaza neza " + auth.user.username);
+  }, function(){
+    alert("Habaye ikibazo");
+  });
+}
+
+renderProducts(products);
 </script>
 
 </body>
