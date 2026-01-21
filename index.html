@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="rn">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>nduwimana23 Pi Shop</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pi Shop Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Pi SDK -->
   <script src="https://sdk.minepi.com/pi-sdk.js"></script>
@@ -12,93 +12,150 @@
   </script>
 
   <style>
-    body { font-family: Arial; background: #f5f5f5; margin:0; padding:10px; }
-    h1 { text-align: center; color:#6a0dad; }
-    .product { background:white; margin:10px 0; padding:10px; border-radius:8px; display:flex; align-items:center; }
-    .product img { width:80px; height:80px; object-fit:cover; margin-right:10px; border-radius:5px; }
-    .product-details { flex:1; }
-    button { background:#6a0dad; color:white; border:none; padding:8px 12px; border-radius:5px; margin-top:5px; }
-    .language-buttons { text-align:center; margin-bottom:10px; }
-    .language-buttons button { margin:0 5px; background:#333; color:white; }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+
+    header {
+      background: #0a7d4f;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .container {
+      padding: 15px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .cart {
+      background: #0a7d4f;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .product h3 {
+      margin-top: 0;
+    }
+
+    .price {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #0a7d4f;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #444;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #777;
+    }
   </style>
 </head>
 
 <body>
-<h1>🛒 nduwimana23 Pi Shop</h1>
 
-<button onclick="login()">🔐 Injira muri Pi</button>
+<header>
+  <h2>Pi Shop Marketplace</h2>
+  <p>All payments in Pi (GCV Based)</p>
+</header>
 
-<div class="language-buttons">
-  <button onclick="renderShop('kr')">🇧🇮 Kirundi</button>
-  <button onclick="renderShop('pt')">🇲🇿 Portuguese</button>
+<div class="container">
+
+  <div class="top-bar">
+    <button class="secondary" onclick="login()">Injira muri Pi</button>
+    <div class="cart">🛒 Cart: <span id="cartCount">0</span></div>
+  </div>
+
+  <div class="products">
+
+    <div class="product">
+      <h3>Isukari (1kg)</h3>
+      <p>Isukari yiza yo mu rugo</p>
+      <div class="price">Igiciro: 0.003 Pi</div>
+      <button onclick="buy('Isukari', 0.003)">Gura</button>
+    </div>
+
+    <div class="product">
+      <h3>Umuceri (1kg)</h3>
+      <p>Umuceri wiza wo kurya neza</p>
+      <div class="price">Igiciro: 0.005 Pi</div>
+      <button onclick="buy('Umuceri', 0.005)">Gura</button>
+    </div>
+
+    <div class="product">
+      <h3>Isabuni</h3>
+      <p>Isabuni yo mu rugo</p>
+      <div class="price">Igiciro: 0.002 Pi</div>
+      <button onclick="buy('Isabuni', 0.002)">Gura</button>
+    </div>
+
+  </div>
 </div>
 
-<hr>
-
-<div id="shop-container"></div>
+<footer>
+  © 2026 Pi Shop • Sandbox Mode
+</footer>
 
 <script>
-  // Products array
-  const products = [
-    {name:{kr:"Amavuta ya Palme", pt:"Óleo de Palme"}, price:1, image:"images/amavuta-palme.jpg"},
-    {name:{kr:"Amavuta ya Olive", pt:"Óleo de Oliva"}, price:2, image:"images/amavuta-olive.jpg"},
-    {name:{kr:"Umuceri", pt:"Arroz"}, price:2, image:"images/umuceri.jpg"},
-    {name:{kr:"Isukari", pt:"Açúcar"}, price:1, image:"images/isukari.jpg"},
-    {name:{kr:"Ibiharage", pt:"Feijão"}, price:1, image:"images/ibiharage.jpg"},
-    {name:{kr:"Isabuni", pt:"Sabão"}, price:1, image:"images/isabuni.jpg"},
-    {name:{kr:"Ama jus", pt:"Suco"}, price:1, image:"images/jus.jpg"},
-    {name:{kr:"Amata", pt:"Leite"}, price:1, image:"images/amata.jpg"},
-    {name:{kr:"Pampers", pt:"Fralda"}, price:3, image:"images/pampers.jpg"},
-    {name:{kr:"Fanta", pt:"Fanta"}, price:1, image:"images/fanta.jpg"},
-    {name:{kr:"Imivinyu", pt:"Vinho"}, price:2, image:"images/vin.jpg"}
-  ];
+  let cart = 0;
 
-  // Render products
-  function renderShop(lang="kr"){
-    const container = document.getElementById('shop-container');
-    container.innerHTML = "";
-    products.forEach(product => {
-      const div = document.createElement('div');
-      div.className = "product";
-      div.innerHTML = `
-        <img src="${product.image}" alt="${product.name[lang]}">
-        <div class="product-details">
-          <h3>${product.name[lang]}</h3>
-          <p>Igiciro: ${product.price} Pi</p>
-          <button onclick="pay('${product.name[lang]}', ${product.price})">Gura na Pi</button>
-        </div>
-      `;
-      container.appendChild(div);
-    });
-  }
-
-  // Login function
-  function login(){
-    if(!window.Pi){ alert("Banza ukoreshe Pi Browser!"); return; }
-    Pi.authenticate(['username'], function(auth){
+  function login() {
+    Pi.authenticate(['username'], function(auth) {
       alert("Murakaza neza " + auth.user.username);
-    }, function(error){
+    }, function(error) {
       alert("Habaye ikibazo co kwinjira");
+      console.log(error);
     });
   }
 
-  // Payment function
-  function pay(item, amount){
-    if(!window.Pi){ alert("Banza ukoreshe Pi Browser!"); return; }
-    Pi.createPayment({
-      amount: amount,
-      memo: item,
-      metadata: { product: item }
-    },{
-      onReadyForServerApproval: function(paymentId){ console.log(paymentId); },
-      onReadyForServerCompletion: function(paymentId, txid){ alert("Waguze " + item + " neza!"); },
-      onCancel: function(){ alert("Wahagaritse igikorwa"); },
-      onError: function(error){ console.error(error); }
-    });
+  function buy(product, price) {
+    cart++;
+    document.getElementById("cartCount").innerText = cart;
+    alert(
+      "Wahisemwo kugura:\n" +
+      product +
+      "\nIgiciro: " + price + " Pi\n\n(Sandbox test)"
+    );
   }
-
-  // Initial render
-  renderShop('kr');
 </script>
 
 </body>
