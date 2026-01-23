@@ -5,220 +5,192 @@
 <title>Pi Marketplace</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- PI SDK -->
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
 <script>
-  Pi.init({ version: "2.0", sandbox: true });
+  Pi.init({ version: "2.0" }); /* sandbox=false automatically in production */
 </script>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
-  padding-bottom: 90px;
-}
-header {
-  background: #0a8f3c;
-  color: white;
-  padding: 15px;
-  text-align: center;
-}
-button { cursor: pointer; }
+body{margin:0;font-family:Arial;background:#f4f4f4;padding-bottom:80px}
+header{background:#0a8f3c;color:white;padding:15px;text-align:center;position:relative}
+.search{padding:10px}
+.search input{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc}
 
-.top-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 10px;
-}
-.top-actions button, select {
-  padding: 6px 10px;
-  border-radius: 6px;
-  border: none;
-}
+.categories{display:flex;gap:10px;overflow-x:auto;padding:10px}
+.cat{background:#ddd;padding:6px 14px;border-radius:20px;font-size:13px}
 
-.search-box {
-  padding: 12px;
-}
-.search-box input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
+.section{display:none;padding:15px}
+.product{background:white;padding:15px;border-radius:10px;margin-bottom:15px}
+.price{color:#0a8f3c;font-weight:bold}
 
-.categories {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  overflow-x: auto;
-}
-.category {
-  background: #ddd;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 13px;
-}
+button{cursor:pointer}
+.buy{background:#0a8f3c;color:white;border:none;padding:10px;width:100%;border-radius:8px}
 
-.products {
-  padding: 15px;
+.bottom-nav{
+ position:fixed;bottom:0;width:100%;background:white;
+ display:flex;justify-content:space-around;
+ border-top:1px solid #ccc;padding:6px 0
 }
-.product {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-.price {
-  color: #0a8f3c;
-  font-weight: bold;
-}
-.buy-btn {
-  background: #0a8f3c;
-  color: white;
-  border: none;
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  margin-top: 8px;
-}
+.bottom-nav button{background:none;border:none;font-size:12px}
 
-.section {
-  display: none;
-  padding: 15px;
+.lang-menu{
+ position:absolute;top:15px;right:15px;
+ background:white;color:black;border-radius:8px;
+ display:none;padding:5px
 }
-
-.ai-chat {
-  position: fixed;
-  right: 15px;
-  bottom: 100px;
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: #0a8f3c;
-  color: white;
-  border: none;
-  font-size: 22px;
-}
-
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: white;
-  border-top: 1px solid #ccc;
-  display: flex;
-  justify-content: space-around;
-  padding: 8px 0;
-}
-.bottom-nav button {
-  background: none;
-  border: none;
-  font-size: 12px;
-}
+.lang-menu div{padding:5px}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h2>🛒 Pi Marketplace</h2>
-  <p>All payments in Pi (GCV)</p>
+<h2>🛒 Pi Marketplace</h2>
+<p>All payments in Pi (GCV)</p>
 
-  <div class="top-actions">
-    <button onclick="login()">🔐 Login</button>
-    <button onclick="openWallet()">👛 Wallet</button>
+<button onclick="toggleLang()" style="position:absolute;top:15px;right:15px;background:none;border:none;font-size:20px">🌐</button>
+<div id="langMenu" class="lang-menu">
+  <div onclick="setLang('rn')">🇧🇮 Ikirundi</div>
+  <div onclick="setLang('pt')">🇵🇹 Portuguese</div>
+  <div onclick="setLang('en')">🇬🇧 English</div>
+</div>
 
-    <select onchange="changeLang(this.value)">
-      <option value="en">English</option>
-      <option value="rn">Ikirundi</option>
-      <option value="pt">Portuguese</option>
-    </select>
-  </div>
+<div style="margin-top:10px">
+  <button onclick="login()">🔐 Login</button>
+  <button onclick="showSection('cart')">🛒 Cart</button>
+  <button onclick="openWallet()">👛 Wallet</button>
+</div>
 </header>
 
-<div class="search-box">
-  <input type="text" id="search" placeholder="Search product..." onkeyup="searchProduct()">
+<div class="search">
+<input id="search" placeholder="Search product..." onkeyup="searchProduct()">
 </div>
 
 <div class="categories">
-  <div class="category">Foods</div>
-  <div class="category">Drinks</div>
-  <div class="category">Electronics</div>
+<div class="cat">Foods</div>
+<div class="cat">Drinks</div>
+<div class="cat">Household</div>
 </div>
 
 <!-- SHOP -->
-<div id="shop" class="products section" style="display:block">
+<div id="shop" class="section" style="display:block">
 
-  <div class="product" data-name="rice">
-    <h3>Umuceri</h3>
-    <p class="price">2 Pi</p>
-    <button class="buy-btn" onclick="buy()">Gura na Pi</button>
-  </div>
+<div class="product" data-name="rice">
+<h3>Umuceri</h3>
+<p>Vendor: Paul Shop</p>
+<p class="price">2 Pi</p>
+<button class="buy" onclick="addToCart('Umuceri',2)">Add to cart</button>
+</div>
 
-  <div class="product" data-name="fanta">
-    <h3>Fanta</h3>
-    <p class="price">1 Pi</p>
-    <button class="buy-btn" onclick="buy()">Buy with Pi</button>
-  </div>
+<div class="product" data-name="sugar">
+<h3>Isukari</h3>
+<p>Vendor: Paul Shop</p>
+<p class="price">1.5 Pi</p>
+<button class="buy" onclick="addToCart('Isukari',1.5)">Add to cart</button>
+</div>
 
-  <div class="product" data-name="radio">
-    <h3>Radio</h3>
-    <p class="price">5 Pi</p>
-    <button class="buy-btn" onclick="buy()">Comprar com Pi</button>
-  </div>
+<div class="product" data-name="soap">
+<h3>Isabuni</h3>
+<p>Vendor: Maria Store</p>
+<p class="price">1 Pi</p>
+<button class="buy" onclick="addToCart('Isabuni',1)">Add to cart</button>
+</div>
 
+</div>
+
+<!-- VENDORS -->
+<div id="vendors" class="section">
+<h3>🏪 Vendors</h3>
+
+<div class="product">
+<h4>Paul Shop</h4>
+<p>Foods & Household</p>
+</div>
+
+<div class="product">
+<h4>Maria Store</h4>
+<p>Household Products</p>
+</div>
+</div>
+
+<!-- CART -->
+<div id="cart" class="section">
+<h3>🛒 My Cart</h3>
+<ul id="cartItems"></ul>
+<p id="total"></p>
+<button class="buy" onclick="pay()">Pay with Pi</button>
 </div>
 
 <!-- LEARN -->
 <div id="learn" class="section">
-  <h3>📘 Learn</h3>
-  <p>Learn how Pi payments and marketplace work.</p>
+<h3>📘 Learn</h3>
+<p>Learn how Pi Marketplace works and how to trade safely.</p>
 </div>
 
 <!-- CHAT -->
 <div id="chat" class="section">
-  <h3>💬 AI Support</h3>
-  <p>Ask questions about products and Pi usage.</p>
+<h3>💬 AI Support</h3>
+<p>Ask questions about products, vendors or payments.</p>
 </div>
 
-<button class="ai-chat" onclick="showSection('chat')">💬</button>
-
 <div class="bottom-nav">
-  <button onclick="showSection('shop')">Shop</button>
-  <button onclick="showSection('learn')">Learn</button>
-  <button onclick="showSection('chat')">Chat</button>
+<button onclick="showSection('shop')">Shop</button>
+<button onclick="showSection('vendors')">Vendors</button>
+<button onclick="showSection('learn')">Learn</button>
+<button onclick="showSection('chat')">Chat</button>
 </div>
 
 <script>
-function login() {
-  Pi.authenticate(['username'], auth => {
-    alert("Welcome " + auth.user.username);
-  }, err => alert("Login failed"));
+let cart=[];
+
+function showSection(id){
+ document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+ document.getElementById(id).style.display='block';
 }
 
-function openWallet() {
-  alert("Pi Wallet will open in production");
+function addToCart(name,price){
+ cart.push({name,price});
+ alert(name+" added");
 }
 
-function buy() {
-  alert("Payment test (sandbox)");
+function searchProduct(){
+ let v=document.getElementById("search").value.toLowerCase();
+ document.querySelectorAll(".product").forEach(p=>{
+  p.style.display=p.dataset.name?.includes(v)?"block":"block";
+ });
 }
 
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
-  document.getElementById(id).style.display = 'block';
+function toggleLang(){
+ let m=document.getElementById("langMenu");
+ m.style.display=m.style.display==="block"?"none":"block";
+}
+function setLang(l){
+ alert("Language set to "+l);
+ toggleLang();
 }
 
-function searchProduct() {
-  let value = document.getElementById("search").value.toLowerCase();
-  document.querySelectorAll(".product").forEach(p => {
-    p.style.display = p.dataset.name.includes(value) ? "block" : "none";
-  });
+function login(){
+ Pi.authenticate(['username'],auth=>{
+  alert("Welcome "+auth.user.username);
+ });
 }
 
-function changeLang(lang) {
-  alert("Language switched to " + lang);
+function openWallet(){
+ alert("Wallet opens in Pi Browser");
+}
+
+function pay(){
+ let total=cart.reduce((s,i)=>s+i.price,0);
+ document.getElementById("total").innerText="Total: "+total+" Pi";
+
+ Pi.createPayment({
+  amount: total,
+  memo: "Marketplace purchase (GCV)",
+  metadata: {cart}
+ },{
+  onReadyForServerApproval: function(id){}
+ });
 }
 </script>
 
