@@ -1,42 +1,47 @@
 <!DOCTYPE html>
-<html lang="rn">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pi Shop Marketplace</title>
 
-<!-- PI SDK -->
+<!-- Pi SDK -->
 <script src="https://sdk.minepi.com/pi-sdk.js"></script>
-<script>
-  Pi.init({ version: "2.0", sandbox: true });
-</script>
+<script>Pi.init({ version: "2.0", sandbox: true });</script>
 
 <style>
 body {
-  margin: 0;
   font-family: Arial, sans-serif;
-  background: #f4f4f4;
+  margin: 0;
+  background: #f4f6f5;
 }
 
 header {
-  background: #0a7a4a;
+  background: #0a7c4a;
   color: white;
-  padding: 20px;
-  text-align: center;
+  padding: 15px;
 }
 
-nav {
+header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+.nav {
   display: flex;
   justify-content: space-around;
   background: white;
   padding: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,.1);
+  border-bottom: 1px solid #ddd;
 }
 
-nav button {
-  border: none;
-  background: none;
-  font-size: 16px;
+.nav div {
+  font-weight: bold;
   cursor: pointer;
 }
 
@@ -44,7 +49,29 @@ nav button {
   padding: 15px;
 }
 
-.search-box input {
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+button {
+  background: #0a7c4a;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button.gray {
+  background: #444;
+}
+
+.search input {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -52,54 +79,35 @@ nav button {
 }
 
 .categories {
-  margin: 15px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.categories button {
-  margin: 5px;
-  padding: 8px 12px;
+.category {
+  padding: 8px 14px;
+  background: #e8e8e8;
   border-radius: 20px;
-  border: 1px solid #0a7a4a;
-  background: white;
-  color: #0a7a4a;
   cursor: pointer;
 }
 
-.categories button.active {
-  background: #0a7a4a;
+.category.active {
+  background: #0a7c4a;
   color: white;
-}
-
-.product {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
 }
 
 .product h3 {
   margin: 0;
 }
 
-.buy-btn {
-  margin-top: 10px;
-  padding: 10px;
-  width: 100%;
-  background: #0a7a4a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.price {
+  font-weight: bold;
+  margin: 8px 0;
 }
 
-.login-btn {
-  width: 100%;
-  padding: 12px;
-  background: #333;
-  color: white;
-  border-radius: 8px;
-  border: none;
-  margin-bottom: 15px;
+.wallet {
+  background: #e9f4ef;
+  border: 1px solid #b8dfcc;
 }
 </style>
 </head>
@@ -111,90 +119,90 @@ nav button {
   <p>All payments in Pi (GCV Based)</p>
 </header>
 
-<nav>
-  <button>Products</button>
-  <button>Vendors</button>
-  <button>My Cart (<span id="cartCount">0</span>)</button>
-</nav>
+<div class="nav">
+  <div>Products</div>
+  <div>Vendors</div>
+  <div>My Cart (0)</div>
+</div>
 
 <div class="container">
 
-<button class="login-btn" onclick="loginPi()">Injira muri Pi</button>
+  <!-- Login -->
+  <div class="card">
+    <button class="gray" onclick="login()">Injira muri Pi</button>
+  </div>
 
-<div class="search-box">
-  <input type="text" placeholder="Rondera igicuruzwa..." onkeyup="searchProduct(this.value)">
-</div>
+  <!-- Wallet UI -->
+  <div class="card wallet">
+    <h3>Official Pi Wallet</h3>
+    <p id="walletAddress">Wallet izoboneka umaze kwinjira</p>
+    <button onclick="copyWallet()">Copy</button>
+  </div>
 
-<div class="categories">
-  <button class="active" onclick="filterCategory('all')">All</button>
-  <button onclick="filterCategory('food')">Foods</button>
-  <button onclick="filterCategory('drink')">Drinks</button>
-  <button onclick="filterCategory('electronic')">Electronics</button>
-</div>
+  <!-- Search -->
+  <div class="card search">
+    <h3>Search Products</h3>
+    <input type="text" placeholder="Search for foods, drinks, electronics">
+  </div>
 
-<div id="products"></div>
+  <!-- Categories -->
+  <div class="card">
+    <div class="categories">
+      <div class="category active">All</div>
+      <div class="category">Foods</div>
+      <div class="category">Drinks</div>
+      <div class="category">Electronics</div>
+      <div class="category">Household</div>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="card product">
+    <h3>Isukari (1kg)</h3>
+    <p>Isukari yiza yo mu rugo</p>
+    <p class="price">Igiciro: 0.003 Pi</p>
+    <button onclick="buy()">Gura</button>
+  </div>
+
+  <div class="card product">
+    <h3>Umuceri (1kg)</h3>
+    <p>Umuceri wiza wo kurya neza</p>
+    <p class="price">Igiciro: 0.005 Pi</p>
+    <button onclick="buy()">Gura</button>
+  </div>
+
+  <div class="card product">
+    <h3>Isabuni</h3>
+    <p>Isabuni yo mu rugo</p>
+    <p class="price">Igiciro: 0.002 Pi</p>
+    <button onclick="buy()">Gura</button>
+  </div>
 
 </div>
 
 <script>
-let cart = 0;
-let currentCategory = "all";
-
-const products = [
-  { name: "Isukari (1kg)", desc: "Isukari yiza yo mu rugo", price: 0.003, category: "food" },
-  { name: "Umuceri (1kg)", desc: "Umuceri wiza wo kurya neza", price: 0.005, category: "food" },
-  { name: "Isabuni", desc: "Isabuni yo mu rugo", price: 0.002, category: "food" }
-];
-
-function renderProducts(list){
-  const div = document.getElementById("products");
-  div.innerHTML = "";
-  list.forEach(p => {
-    div.innerHTML += `
-      <div class="product">
-        <h3>${p.name}</h3>
-        <p>${p.desc}</p>
-        <b>Igiciro: ${p.price} Pi</b>
-        <button class="buy-btn" onclick="buy()">Gura</button>
-      </div>
-    `;
-  });
-}
-
-function filterCategory(cat){
-  currentCategory = cat;
-  document.querySelectorAll(".categories button").forEach(b => b.classList.remove("active"));
-  event.target.classList.add("active");
-  applyFilter();
-}
-
-function searchProduct(text){
-  applyFilter(text);
-}
-
-function applyFilter(search=""){
-  let list = products.filter(p =>
-    (currentCategory === "all" || p.category === currentCategory) &&
-    p.name.toLowerCase().includes(search.toLowerCase())
+function login() {
+  Pi.authenticate(
+    ['username', 'payments'],
+    function(auth) {
+      document.getElementById("walletAddress").innerText =
+        "Connected Pi User: " + auth.user.username;
+    },
+    function(error) {
+      alert("Habaye ikibazo");
+    }
   );
-  renderProducts(list);
 }
 
-function buy(){
-  cart++;
-  document.getElementById("cartCount").innerText = cart;
-  alert("Vyashizwe muri cart (test)");
+function copyWallet() {
+  const text = document.getElementById("walletAddress").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Wallet copied");
 }
 
-function loginPi(){
-  Pi.authenticate(['username'], function(auth){
-    alert("Murakaza neza " + auth.user.username);
-  }, function(){
-    alert("Habaye ikibazo");
-  });
+function buy() {
+  alert("Payment izoshirwamwo mu ntambwe ikurikira");
 }
-
-renderProducts(products);
 </script>
 
 </body>
