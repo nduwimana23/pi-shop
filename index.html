@@ -1,209 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pi Shop Marketplace</title>
+  <meta charset="UTF-8">
+  <title>Pi Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Pi SDK -->
-<script src="https://sdk.minepi.com/pi-sdk.js"></script>
-<script>Pi.init({ version: "2.0", sandbox: true });</script>
+  <!-- Pi SDK -->
+  <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+  <script>
+    Pi.init({ version: "2.0", sandbox: true });
+  </script>
 
-<style>
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  background: #f4f6f5;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding-bottom: 80px;
+    }
 
-header {
-  background: #0a7c4a;
-  color: white;
-  padding: 15px;
-}
+    header {
+      background: green;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
 
-header h1 {
-  margin: 0;
-  font-size: 22px;
-}
+    button {
+      cursor: pointer;
+    }
 
-header p {
-  margin: 5px 0 0;
-  font-size: 14px;
-}
+    .login-btn {
+      background: white;
+      color: green;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
 
-.nav {
-  display: flex;
-  justify-content: space-around;
-  background: white;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
+    .search-box {
+      padding: 15px;
+    }
 
-.nav div {
-  font-weight: bold;
-  cursor: pointer;
-}
+    .search-box input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
 
-.container {
-  padding: 15px;
-}
+    .categories {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+      overflow-x: auto;
+    }
 
-.card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
+    .category {
+      padding: 8px 14px;
+      border-radius: 20px;
+      background: #ddd;
+      font-size: 13px;
+    }
 
-button {
-  background: #0a7c4a;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-}
+    .category.active {
+      background: green;
+      color: white;
+    }
 
-button.gray {
-  background: #444;
-}
+    .products {
+      padding: 15px;
+    }
 
-.search input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
+    .product {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
 
-.categories {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+    .product h3 {
+      margin: 0 0 5px 0;
+    }
 
-.category {
-  padding: 8px 14px;
-  background: #e8e8e8;
-  border-radius: 20px;
-  cursor: pointer;
-}
+    .price {
+      color: green;
+      font-weight: bold;
+    }
 
-.category.active {
-  background: #0a7c4a;
-  color: white;
-}
+    .buy-btn {
+      background: green;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
 
-.product h3 {
-  margin: 0;
-}
+    .ai-support {
+      position: fixed;
+      right: 15px;
+      bottom: 90px;
+      background: green;
+      color: white;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      font-size: 24px;
+      border: none;
+    }
 
-.price {
-  font-weight: bold;
-  margin: 8px 0;
-}
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #ddd;
+      padding: 8px 0;
+    }
 
-.wallet {
-  background: #e9f4ef;
-  border: 1px solid #b8dfcc;
-}
-</style>
+    .bottom-nav button {
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: #444;
+    }
+
+    .bottom-nav button.active {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <h1>Pi Shop Marketplace</h1>
-  <p>All payments in Pi (GCV Based)</p>
-</header>
+  <!-- HEADER -->
+  <header>
+    <h2>🛒 Pi Shop</h2>
+    <p>All payments in Pi (GCV)</p>
+    <button class="login-btn" onclick="login()">Injira muri Pi</button>
+  </header>
 
-<div class="nav">
-  <div>Products</div>
-  <div>Vendors</div>
-  <div>My Cart (0)</div>
-</div>
-
-<div class="container">
-
-  <!-- Login -->
-  <div class="card">
-    <button class="gray" onclick="login()">Injira muri Pi</button>
+  <!-- SEARCH -->
+  <div class="search-box">
+    <input type="text" placeholder="Shaka igicuruzwa...">
   </div>
 
-  <!-- Wallet UI -->
-  <div class="card wallet">
-    <h3>Official Pi Wallet</h3>
-    <p id="walletAddress">Wallet izoboneka umaze kwinjira</p>
-    <button onclick="copyWallet()">Copy</button>
+  <!-- CATEGORIES -->
+  <div class="categories">
+    <div class="category active">Foods</div>
+    <div class="category">Drinks</div>
+    <div class="category">Electronics</div>
+    <div class="category">Household</div>
   </div>
 
-  <!-- Search -->
-  <div class="card search">
-    <h3>Search Products</h3>
-    <input type="text" placeholder="Search for foods, drinks, electronics">
-  </div>
+  <!-- PRODUCTS -->
+  <div class="products">
 
-  <!-- Categories -->
-  <div class="card">
-    <div class="categories">
-      <div class="category active">All</div>
-      <div class="category">Foods</div>
-      <div class="category">Drinks</div>
-      <div class="category">Electronics</div>
-      <div class="category">Household</div>
+    <div class="product">
+      <h3>Umuceri</h3>
+      <p>Category: Foods</p>
+      <p class="price">2 Pi</p>
+      <button class="buy-btn" onclick="buy()">Gura na Pi</button>
     </div>
+
+    <div class="product">
+      <h3>Fanta</h3>
+      <p>Category: Drinks</p>
+      <p class="price">1 Pi</p>
+      <button class="buy-btn" onclick="buy()">Gura na Pi</button>
+    </div>
+
+    <div class="product">
+      <h3>Radio</h3>
+      <p>Category: Electronics</p>
+      <p class="price">5 Pi</p>
+      <button class="buy-btn" onclick="buy()">Gura na Pi</button>
+    </div>
+
   </div>
 
-  <!-- Products -->
-  <div class="card product">
-    <h3>Isukari (1kg)</h3>
-    <p>Isukari yiza yo mu rugo</p>
-    <p class="price">Igiciro: 0.003 Pi</p>
-    <button onclick="buy()">Gura</button>
+  <!-- AI SUPPORT -->
+  <button class="ai-support" onclick="openAI()">💬</button>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="active">Products</button>
+    <button>Vendors</button>
+    <button>My Cart</button>
+    <button>Support</button>
+    <button>Profile</button>
   </div>
 
-  <div class="card product">
-    <h3>Umuceri (1kg)</h3>
-    <p>Umuceri wiza wo kurya neza</p>
-    <p class="price">Igiciro: 0.005 Pi</p>
-    <button onclick="buy()">Gura</button>
-  </div>
-
-  <div class="card product">
-    <h3>Isabuni</h3>
-    <p>Isabuni yo mu rugo</p>
-    <p class="price">Igiciro: 0.002 Pi</p>
-    <button onclick="buy()">Gura</button>
-  </div>
-
-</div>
-
-<script>
-function login() {
-  Pi.authenticate(
-    ['username', 'payments'],
-    function(auth) {
-      document.getElementById("walletAddress").innerText =
-        "Connected Pi User: " + auth.user.username;
-    },
-    function(error) {
-      alert("Habaye ikibazo");
+  <!-- JS -->
+  <script>
+    function login() {
+      Pi.authenticate(
+        ['username'],
+        function(auth) {
+          alert("Murakaza neza " + auth.user.username);
+        },
+        function(error) {
+          alert("Habaye ikibazo");
+        }
+      );
     }
-  );
-}
 
-function copyWallet() {
-  const text = document.getElementById("walletAddress").innerText;
-  navigator.clipboard.writeText(text);
-  alert("Wallet copied");
-}
+    function buy() {
+      alert("Payment test (Sandbox mode)");
+    }
 
-function buy() {
-  alert("Payment izoshirwamwo mu ntambwe ikurikira");
-}
-</script>
+    function openAI() {
+      alert("AI Support izoza mu version ikurikira 🚀");
+    }
+  </script>
 
 </body>
 </html>
