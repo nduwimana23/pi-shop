@@ -47,14 +47,15 @@
 <div class="container">
 
   <!-- SEARCH -->
-  <div class="search">
-    <input type="text" placeholder="Search products...">
-  </div>
+ <div class="search">
+  <input type="text" id="searchInput" placeholder="Search products...">
+</div>
 
   <!-- SHOP -->
-  <section id="shop">
-    <h2>Shop</h2>
-    <div class="grid">
+ <section id="shop">
+  <h2>Shop</h2>
+  <div class="grid" id="productGrid"></div>
+</section>
       <div class="card">
         <img src="https://via.placeholder.com/300x200" alt="">
         <h3>Product One</h3>
@@ -102,3 +103,38 @@
 
 </body>
 </html>
+<script>
+  const products = [
+    { name: "Product One", price: "10 Pi", img: "https://via.placeholder.com/300x200" },
+    { name: "Product Two", price: "5 Pi", img: "https://via.placeholder.com/300x200" },
+    { name: "Phone Accessory", price: "7 Pi", img: "https://via.placeholder.com/300x200" },
+    { name: "Digital Service", price: "3 Pi", img: "https://via.placeholder.com/300x200" }
+  ];
+
+  const grid = document.getElementById("productGrid");
+  const searchInput = document.getElementById("searchInput");
+
+  function renderProducts(list) {
+    grid.innerHTML = "";
+    list.forEach(p => {
+      grid.innerHTML += `
+        <div class="card">
+          <img src="${p.img}">
+          <h3>${p.name}</h3>
+          <p>Price: ${p.price}</p>
+          <a class="btn" href="#">View Details</a>
+        </div>
+      `;
+    });
+  }
+
+  searchInput.addEventListener("input", () => {
+    const q = searchInput.value.toLowerCase();
+    const filtered = products.filter(p =>
+      p.name.toLowerCase().includes(q)
+    );
+    renderProducts(filtered);
+  });
+
+  renderProducts(products);
+</script>
